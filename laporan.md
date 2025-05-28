@@ -82,8 +82,7 @@ Metode IQR untuk menghapus outlier didasarkan pada gagasan bahwa nilai-nilai yan
     - Kuartil Pertama (Q1): Nilai di bawahnya terletak 25% data.
     - Kuartil Ketiga (Q3): Nilai di bawahnya terletak 75% data (atau 25% data terletak di atasnya).
     - IQR: Adalah perbedaan antara Kuartil Ketiga (Q3) dan Kuartil Pertama (Q1). IQR = Q3 - Q1
-
-    ![Drop Outlier](img/dropOutlier.png)
+  ![Drop Outlier](img/dropOutlier.png)
 
     Fungsi DropOutlier:
         - Menggunakan np.where untuk membatasi nilai-nilai dalam kolom:
@@ -153,11 +152,11 @@ RMSE (Root Mean Squared Error) mengukur rata-rata besar kesalahan prediksi model
 **Mencetak hasil evaluasi untuk setiap model.**
 | Models | R Squared Score (R²) | RMSE |
 | --- | --- | --- | 
-| Linear Regression | 0.6748 | 1342.9899
-| Ridge Regression | 0.6748 | 1342.9773
-| Lasso Regression | 0.6750 | 1342.5347
-| ElasticNet Regression | 0.6525 | 1388.2127
-| XGBRegressor  | 0.8314 | 966.8470
+| Linear Regression | 0.6748 | 1342.9899 |
+| Ridge Regression | 0.6748 | 1342.9773 |
+| Lasso Regression | 0.6750 | 1342.5347 |
+| ElasticNet Regression | 0.6525 | 1388.2127 |
+| XGBRegressor  | 0.8314 | 966.8470 |
 
 Setelah dilihat evaluasi masing-masing model, menggunakan model XGBRegressor menghasilkan skor R² yang tertinggi dari model yang lain. Maka XGBRegressor yang akan digunakan sebagai model regresi untuk melakukan ***Predictive Analytics* Time Series.**
 
