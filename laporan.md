@@ -149,14 +149,15 @@ RMSE (Root Mean Squared Error) mengukur rata-rata besar kesalahan prediksi model
 **Mengumpulkan hasil evaluasi dalam DataFrame results_df untuk perbandingan yang lebih mudah.**
 | results_df = pd.DataFrame(results) |
 | --- | 
+
 **Mencetak hasil evaluasi untuk setiap model.**
-| Models | R Squared Score (R²) | RMSE |
-| --- | --- | --- | 
-| Linear Regression | 0.6748 | 1342.9899 |
-| Ridge Regression | 0.6748 | 1342.9773 |
-| Lasso Regression | 0.6750 | 1342.5347 |
-| ElasticNet Regression | 0.6525 | 1388.2127 |
-| XGBRegressor  | 0.8314 | 966.8470 |
+|        Models         | R Squared Score (R²) |   RMSE    |
+| --------------------- | -------------------- | --------- |
+| Linear Regression     | 0.6748               | 1342.9899 |
+| Ridge Regression      | 0.6748               | 1342.9773 |
+| Lasso Regression      | 0.6750               | 1342.5347 |
+| ElasticNet Regression | 0.6525               | 1388.2127 |
+| XGBRegressor          | 0.8314               | 966.8470  |
 
 Setelah dilihat evaluasi masing-masing model, menggunakan model XGBRegressor menghasilkan skor R² yang tertinggi dari model yang lain. Maka XGBRegressor yang akan digunakan sebagai model regresi untuk melakukan ***Predictive Analytics* Time Series.**
 
