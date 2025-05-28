@@ -121,12 +121,14 @@ store_sales.sort_values(by='units_sold', ascending=False)
 
 # Penjualan per kategori
 per_category_sales = df.groupby('product_category')['marketing_spend'].mean().reset_index()
-per_category_sales.sort_values(by='marketing_spend', ascending=False)
+per_category_sales= per_category_sales.sort_values(by='marketing_spend', ascending=False)
+
+px.histogram(per_category_sales, x='product_category', y='marketing_spend', color='product_category')
 
 """**Insight yang didapatkan :**
 - Pengerahan budget marketing sama rata pada semua kategori product.
 
-### Penjualan Per Produk Per Bulan
+### Penjualan Produk Per Bulan (Berdasarkan Katalog Produk)
 """
 
 # Penjualan produk per bulan
@@ -188,7 +190,7 @@ clean_df.isna().sum()
 
 clean_df.duplicated().sum()
 
-"""Tidak ada Data Duplikat dan Kosong : **Tidak perlu Pengolahan *Drop* .**
+"""Tidak ada Data Duplikat dan Kosong : **Tidak perlu Pengolahan *Drop* atau Imputasi .**
 
 ## Label Encoder
 """
@@ -266,16 +268,25 @@ for col in numeric_cols_df:
     data_outlier[col] = outlier_iqr(clean_df[col])
     print('Outlier (' + col + '):', len(data_outlier[col]), 'outliers')
 
+"""## Lag Sales
+
+Dalam analisis deret waktu, *lag* mengacu pada nilai masa lalu dari suatu variabel pada langkah waktu sebelumnya. Ini mewakili gagasan melihat ke belakang dalam urutan data untuk menganalisis bagaimana pengamatan masa lalu memengaruhi nilai saat ini atau masa depan.
+
+Misalnya, dalam kumpulan data suhu harian, suhu dari kemarin (waktu t-1 ) adalah jeda 1 relatif terhadap suhu hari ini (waktu t ). Jeda dibuat dengan menggeser data deret waktu dengan sejumlah periode tertentu, yang secara efektif menyelaraskan nilai masa lalu dengan stempel waktu saat ini.
+
+*Lag* merupakan hal mendasar dalam pemodelan deret waktu karena banyak pola bergantung pada pengamatan sebelumnya. Misalnya, model autoregresif (AR) memprediksi nilai masa depan menggunakan kombinasi linier dari nilai masa lalu, di mana setiap suku dalam model sesuai dengan lag.
+"""
+
+# A simple lag 1 feature
+clean_df['sales_revenue_lag_1'] = clean_df['sales_revenue'].shift(1)
+clean_df.head()
+
 """## Train-Test Split
 
 Langkah fundamental dalam alur kerja Machine Learning. Tujuan utamanya adalah untuk mengevaluasi kinerja model Anda pada data yang belum pernah dilihatnya selama pelatihan.
 """
 
 cols
-
-# A simple lag 1 feature
-clean_df['sales_revenue_lag_1'] = clean_df['sales_revenue'].shift(1)
-clean_df.head()
 
 clean_df.dropna(inplace=True) # Add this line to drop rows with NaN
 
@@ -331,8 +342,8 @@ def evaluate_model(model, X_train, y_train, X_test, y_test, model_name):
 
     # Print results
     print(f"{model_name} Model:")
-    print(f"Test R²: {test_r2:.4f}")
-    print(f"Test RMSE: {test_rmse:.4f}\n")
+    print(f"Test R²: {test_r2:.2f}")
+    print(f"Test RMSE: {test_rmse:.2f}\n")
 
     # Append results to the list for visualization
     results.append({'Model': model_name, 'R²': test_r2, 'RMSE': test_rmse})
@@ -375,8 +386,8 @@ test_r2_ts = r2_score(y_test_ts, y_pred_test_ts)
 test_rmse_ts = np.sqrt(mean_squared_error(y_test_ts, y_pred_test_ts))
 
 print("\nXGBoost Model with Time Series Features:")
-print(f"Test R²: {test_r2_ts:.4f}")
-print(f"Test RMSE: {test_rmse_ts:.4f}\n")
+print(f"Test R²: {test_r2_ts:.2f}")
+print(f"Test RMSE: {test_rmse_ts:.2f}\n")
 
 y_pred_test_ts
 
@@ -416,25 +427,36 @@ y_test_ts_array
 
 y_pred_test_ts
 
+"""## Create Plot"""
+
 # Create a DataFrame for easier plotting
 plot_df = pd.DataFrame({
+    'date': test_dates,
     'Actual Sales Revenue': y_test_ts_array,
     'Predicted Sales Revenue': y_pred_test_ts
-}, index=test_dates) # Use the actual dates as the index
+}) # Use the actual dates as the index
 
 # Check the plot_df to see if it has data
 print("plot_df head:\n", plot_df.head())
 print("plot_df shape:", plot_df.shape)
+
+plot_df.info()
+
+plotting = plot_df.groupby('date').agg({
+    'Actual Sales Revenue': 'sum',
+    'Predicted Sales Revenue': 'sum'
+})
+plotting
 
 # --- Plotting the results directly using plotly ---
 import plotly.graph_objects as go
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=plot_df.index, y=plot_df['Actual Sales Revenue'],
+fig.add_trace(go.Scatter(x=plotting.index, y=plotting['Actual Sales Revenue'],
                           mode='lines+markers', name='Actual Sales Revenue'))
 
-fig.add_trace(go.Scatter(x=plot_df.index, y=plot_df['Predicted Sales Revenue'],
+fig.add_trace(go.Scatter(x=plotting.index, y=plotting['Predicted Sales Revenue'],
                           mode='lines+markers', name='Predicted Sales Revenue',
                           line=dict(dash='dash')))
 
