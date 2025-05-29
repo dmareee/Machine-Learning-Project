@@ -69,14 +69,18 @@ Dengan kode tersebut kita dapat menjumlahkan data null dan duplikat yang ada dal
 ![Feature Correlation](img/featurecorr.png)
 
 ## Data Preparation
-1. Handling Missing Values dan Duplikat: Mengisi nilai kosong atau menghapus baris nilai kosong dan duplikat.
-2. Label Encoding: Menerapkan Labelisasi pada feature categorical sebagai representasi numerik.
+1. Rename semua kolom fitur agar memudahkan memanggil fitur.
+![Rename Column](img/rename.png)
+
+2. Drop Kolom yang kurang digunakan seperti store_ID dan product_ID.
+3. Handling Missing Values dan Duplikat: Mengisi nilai kosong atau menghapus baris nilai kosong dan duplikat.
+4. Label Encoding: Menerapkan Labelisasi pada feature categorical sebagai representasi numerik.
 ![Label Encoding](img/labelingb.png)
 
-3. Scaling: Melakukan normalisasi pada fitur marketing_spend.
+5. Scaling: Melakukan normalisasi pada fitur numerik agar pelatihan model tetap optimal pada sebaran data yang luas seperti digunakan pada fitur numerik ['units_sold', 'discount_percentage', 'marketing_spend'].
 ![Standardization](img/scaling.png)
 
-4. Remove Outlier: 
+6. Remove Outlier: 
 Outlier adalah nilai data yang secara signifikan berbeda dari nilai-nilai lain dalam kumpulan data. Outlier bisa disebabkan oleh kesalahan pengukuran, kesalahan entri data, atau variabilitas alami dalam data.
 Metode IQR untuk menghapus outlier didasarkan pada gagasan bahwa nilai-nilai yang berada jauh di luar rentang pusat data (yang ditentukan oleh IQR) dapat dianggap sebagai outlier
     - Kuartil Pertama (Q1): Nilai di bawahnya terletak 25% data.
@@ -91,7 +95,7 @@ Metode IQR untuk menghapus outlier didasarkan pada gagasan bahwa nilai-nilai yan
         - Fungsi ini mengembalikan kolom (Series) yang nilai outliernya sudah dibatasi.
 
 
-5. :test_tube: Feature Engineering:
+7. :test_tube: Feature Engineering:
   - Ekstraksi fitur 'Date' yang memisahkan format date menjadi fitur : ['Day', 'Month','Year'].
   ![Month Sparsing](img/month.png)
 
@@ -100,7 +104,7 @@ Metode IQR untuk menghapus outlier didasarkan pada gagasan bahwa nilai-nilai yan
 
 *Lag* merupakan hal mendasar dalam pemodelan deret waktu karena banyak pola bergantung pada pengamatan sebelumnya. Misalnya, model autoregresif (AR) memprediksi nilai masa depan menggunakan kombinasi linier dari nilai masa lalu, di mana setiap suku dalam model sesuai dengan lag.
 
-6. Train-Test Split: Membagi data menjadi data train dan test secara time series (Bagian data yang lebih awal digunakan untuk pelatihan, dan bagian data yang lebih akhir digunakan untuk pengujian).
+8. Train-Test Split: Membagi data menjadi data train dan test secara time series (Bagian data yang lebih awal digunakan untuk pelatihan, dan bagian data yang lebih akhir digunakan untuk pengujian).
 **Variabel Utama:**  
 - **Target**: `Sales Revenue (USD)`  
 - **Fitur**:  
@@ -120,7 +124,13 @@ Algoritma yang diimplementasikan untuk dievaluasi meliputi:
 - **ElasticNet Regression** : ElasticNet Regression menggabungkan regularisasi L1 (Lasso) dan L2 (Ridge) dalam satu model. Algoritma ini efektif untuk menangani dataset berdimensi tinggi, multikolinearitas, dan juga melakukan seleksi fitur. ElasticNet memungkinkan penyesuaian antara efek L1 dan L2 melalui parameter alpha, sehingga bisa menangani kasus di mana Lasso atau Ridge saja tidak optimal.
 - **XGBRegressor** : XGBRegressor adalah algoritma regresi berbasis XGBoost (Extreme Gradient Boosting), yaitu teknik ensemble yang menggabungkan banyak pohon keputusan (decision tree) secara bertahap untuk meminimalkan error.
 
-
+Dalam Percobaan *training* model dengan dataset, dibangun menggunakan parameter default yang diberikan dari library scikit-learn dan XGBoost
+**Parameter Model** :
+- **sklearn.linear_model.LinearRegression**(*, fit_intercept=True, copy_X=True, n_jobs=None, positive=False),
+- **sklearn.linear_model.Ridge**(alpha=1.0, *, fit_intercept=True, copy_X=True, max_iter=None, tol=0.0001, solver='auto', positive=False, random_state=None),
+- **sklearn.linear_model.Lasso**(alpha=1.0, *, fit_intercept=True, precompute=False, copy_X=True, max_iter=1000, tol=0.0001, warm_start=False, positive=False, random_state=None, selection='cyclic'),
+- **sklearn.linear_model.ElasticNet**(alpha=1.0, *, l1_ratio=0.5, fit_intercept=True, precompute=False, max_iter=1000, copy_X=True, tol=0.0001, warm_start=False, positive=False, random_state=None, selection='cyclic'),
+- **XGBRegressor**(*, n_estimators = None, booster = None, tree_method = "auto", learning_rate = None, max_iterations = None)
 
 ## Evaluation
 ### Mendefinisikan fungsi evaluate_model yang:
