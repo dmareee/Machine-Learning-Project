@@ -72,15 +72,19 @@ Dengan kode tersebut kita dapat menjumlahkan data null dan duplikat yang ada dal
 1. Rename semua kolom fitur agar memudahkan memanggil fitur.
 ![Rename Column](img/rename.png)
 
-2. Drop Kolom yang kurang digunakan seperti store_ID dan product_ID.
-3. Handling Missing Values dan Duplikat: Mengisi nilai kosong atau menghapus baris nilai kosong dan duplikat.
-4. Label Encoding: Menerapkan Labelisasi pada feature categorical sebagai representasi numerik.
+2. :test_tube: Feature Engineering:
+  - Ekstraksi fitur 'Date' yang memisahkan format date menjadi fitur : ['Day', 'Month','Year'].
+  ![Month Sparsing](img/month.png)
+
+3. Drop Kolom yang kurang digunakan seperti store_ID dan product_ID.
+4. Handling Missing Values dan Duplikat: Mengisi nilai kosong atau menghapus baris nilai kosong dan duplikat, namun karena tidak ada kendala maka kita lewati bagian ini.
+5. Label Encoding: Menerapkan Labelisasi pada feature categorical sebagai representasi numerik.
 ![Label Encoding](img/labelingb.png)
 
-5. Scaling: Melakukan normalisasi pada fitur numerik agar pelatihan model tetap optimal pada sebaran data yang luas seperti digunakan pada fitur numerik ['units_sold', 'discount_percentage', 'marketing_spend'].
+6. Scaling: Melakukan normalisasi pada fitur numerik agar pelatihan model tetap optimal pada sebaran data yang luas seperti digunakan pada fitur numerik ['units_sold', 'discount_percentage', 'marketing_spend'].
 ![Standardization](img/scaling.png)
 
-6. Remove Outlier: 
+7. Remove Outlier: 
 Outlier adalah nilai data yang secara signifikan berbeda dari nilai-nilai lain dalam kumpulan data. Outlier bisa disebabkan oleh kesalahan pengukuran, kesalahan entri data, atau variabilitas alami dalam data.
 Metode IQR untuk menghapus outlier didasarkan pada gagasan bahwa nilai-nilai yang berada jauh di luar rentang pusat data (yang ditentukan oleh IQR) dapat dianggap sebagai outlier
     - Kuartil Pertama (Q1): Nilai di bawahnya terletak 25% data.
@@ -95,10 +99,7 @@ Metode IQR untuk menghapus outlier didasarkan pada gagasan bahwa nilai-nilai yan
         - Fungsi ini mengembalikan kolom (Series) yang nilai outliernya sudah dibatasi.
 
 
-7. :test_tube: Feature Engineering:
-  - Ekstraksi fitur 'Date' yang memisahkan format date menjadi fitur : ['Day', 'Month','Year'].
-  ![Month Sparsing](img/month.png)
-
+8. :test_tube: Feature Engineering:
   - Membuat fitur lag sales:
   ![Lag Sales](img/lagsales.png)
 
@@ -197,5 +198,6 @@ Answer : Setelah menyertakan fitur musiman seperti 'Day', 'Month', 'Year', serta
 
 ### Solutions Statement
 Sesuai dengan perencanaan solusi yang diaplikasikan ke dalam pengerjaan model, pertama kita mencoba dan membandingkan hasil evaluasi R² dan RMSE kita dapat mempertimbangkan model yang cocok untuk dipakai yaitu XGBRegressor yang mampu memprediksi bagaimana tren musiman penjualan dari data tersebut.
+
 
 **---Ini adalah bagian akhir laporan---**
