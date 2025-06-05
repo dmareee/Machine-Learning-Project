@@ -136,7 +136,7 @@ print(f'Sebelum ekstraksi kategori utama {clean_df["category"].loc[0]}')
 clean_df['category'] = clean_df['category'].apply(lambda x: x.split('|')[0] if pd.notnull(x) else x)
 print(f'setelah ekstraksi kategori utama {clean_df["category"].loc[0]}')
 
-# Cleaning and preprocessing text without lemmatization
+# Cleaning and preprocessing text
 def clean_text(text):
     # Convert to lowercase
     text = text.lower()
@@ -148,16 +148,19 @@ def clean_text(text):
     text = re.sub(r'[0-9]+', '', text) # remove numbers
     text = re.sub(r'[^\w\s]', '', text) # remove numbers
 
-
     text = text.replace('\n', ' ') # replace new line into space
     text = text.translate(str.maketrans('', '', string.punctuation)) # remove all punctuations
     text = text.strip(' ') # remove characters space from both left and right text
-    return text
-    # Remove stopwords
+
+    # Remove stopwords and apply lemmatization
     stop_words = set(stopwords.words('english'))
-    # Split text into words and rejoin without stopwords
-    text = ' '.join([word for word in text.split() if word not in stop_words])
-    return text
+    lemmatizer = WordNetLemmatizer()
+    filtered_words = []
+    for word in text.split():
+        if word not in stop_words:
+            filtered_words.append(lemmatizer.lemmatize(word))
+
+    return ' '.join(filtered_words)
 
 # Assuming df is your DataFrame and it has been previously loaded
 # Apply the clean_text function to the DataFrame columns
@@ -168,8 +171,8 @@ clean_df['review_content'] = clean_df['review_content'].apply(clean_text)
 clean_df['category'] = clean_df['category'].apply(clean_text)
 clean_df.head()
 
-print(f'Contoh Sebelum Text Cleaning {df["product_name"].loc[0]}')
-print(f'Contoh Setelah Text Cleaning {clean_df["product_name"].loc[0]}')
+print(f'Contoh Sebelum Text Cleaning: {df["product_name"].loc[0]}')
+print(f'Contoh Setelah Text Cleaning: {clean_df["product_name"].loc[0]}')
 
 """## IQR
 
