@@ -251,5 +251,4 @@ Answer: Pendekatan `Hybrid Recommendation` menggabungkan `Content-Based` dan `Co
 2. Collaborative filtering menggunakan matriks interaksi pengguna-produk (pembelian dan rating) untuk menemukan pola preferensi pengguna serupa.
 3. Hybrid filtering menggabungkan skor dari kedua metode untuk mengatasi cold-start dan meningkatkan performa rekomendasi.
 
-
 **---Ini adalah bagian akhir laporan---**
