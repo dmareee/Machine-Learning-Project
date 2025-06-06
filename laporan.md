@@ -122,12 +122,12 @@ Metode IQR untuk menghapus outlier didasarkan pada gagasan bahwa nilai-nilai yan
 
 5. Proses Text ke dalam bentuk Sentimen.
 
-![Fungsi Sentimen](asset/fungsiSentimen.png)
+    ![Fungsi Sentimen](asset/fungsiSentimen.png)
 Contoh sederhana untuk mengklasifikasikan sentimen sebuah teks berdasarkan nilai polaritas (sentiment polarity) dari analisis sentimen, menggunakan perpustakaan seperti TextBlob atau yang serupa.
 **Penjelasan Threshold Sentimen**
-- **Positif** : Jika nilai polaritas lebih besar dari 0.1, dianggap teks memiliki sentimen positif.
-- **Negatif** : Jika nilai polaritas kurang dari -0.1, teks dianggap memiliki sentimen negatif.
-- **Netral** : Jika nilai polaritas berada di antara -0.1 dan 0.1 (inklusif), teks dianggap netral atau tidak memiliki sentimen yang kuat.
+    - **Positif** : Jika nilai polaritas lebih besar dari 0.1, dianggap teks memiliki sentimen positif.
+    - **Negatif** : Jika nilai polaritas kurang dari -0.1, teks dianggap memiliki sentimen negatif.
+    - **Netral** : Jika nilai polaritas berada di antara -0.1 dan 0.1 (inklusif), teks dianggap netral atau tidak memiliki sentimen yang kuat.
 
 6. Label Encoding: Menerapkan Labelisasi untuk menandakan sentimen setiap review produk.
 ![Label Encoding](asset/labeling.png)
@@ -135,40 +135,53 @@ Contoh sederhana untuk mengklasifikasikan sentimen sebuah teks berdasarkan nilai
 7. Drop Kolom yang kurang relevan untuk sistem rekomendasi seperti: ['discounted_price', 'actual_price', 'discount_percentage', 'review_id', 'review_title', 'user_name', 'img_link', 'product_link']
 
 8. Ekstraksi Fitur Teks dengan TF-IDF.
-
 ![Code TFIDF](asset/CodecategoryExtract.png)
 Menerapkan TF-IDF (Term Frequency dan Inverse Document Frequency) Sasaran utamanya adalah mengevaluasi pentingnya sebuah kata pada sebuah dokumen. Biasanya, terdiri dari:
-- Term Frequency (TF): mengukur seberapa sering sebuah istilah muncul dalam sebuah dokumen. Dihitung dengan membagi jumlah kemunculan sebuah istilah dalam sebuah dokumen dengan jumlah total istilah dalam dokumen tersebut.
-- Inverse Document Frequency (IDF): mengukur pentingnya istilah di seluruh korpus. Dihitung dengan mengambil logaritma dari jumlah total dokumen dibagi dengan jumlah dokumen yang memuat istilah tersebut.
-![Category Extract](asset/categoryExtract.png)
+    - Term Frequency (TF): mengukur seberapa sering sebuah istilah muncul dalam sebuah dokumen. Dihitung dengan membagi jumlah kemunculan sebuah istilah dalam sebuah dokumen dengan jumlah total istilah dalam dokumen tersebut.
+    - Inverse Document Frequency (IDF): mengukur pentingnya istilah di seluruh korpus. Dihitung dengan mengambil logaritma dari jumlah total dokumen dibagi dengan jumlah dokumen yang memuat istilah tersebut.
+
+    ![Category Extract](asset/categoryExtract.png)
 
 9. Train-Test Split: Membagi data menjadi data train dan test.
 ![Data Split](asset\splitdata.png)
-
 X adalah array NumPy yang berisi pasangan ID pengguna dan ID produk yang di-encode. Ini akan menjadi input fitur untuk model rekomendasi Anda, karena model akan belajar dari interaksi pengguna dengan produk tertentu. y adalah array NumPy yang berisi rating yang sudah dinormalisasi, dengan nilai dalam rentang [0, 1]. Ini akan menjadi target (label) untuk model Anda, karena model akan dilatih untuk memprediksi rating pengguna untuk produk tertentu (dalam rentang 0 hingga 1).
-**Variabel Utama:**  
-- **Target**: `rating`  
-- **Fitur**:  
-  - `user`
-  - `product`
+
+    **Variabel Utama:**  
+    - **Target**: `rating`  
+    - **Fitur**:  
+      - `user`
+      - `product`
 
 ## Modeling
-Setelah melakukan Train-Test Split, melakukan pendekatan dengan mencoba beberapa pendekatan sistem rekomendasi berbeda untuk melihat bagaimana masing-masing model bekerja.
+Melakukan pendekatan dengan mencoba beberapa pendekatan sistem rekomendasi berbeda untuk melihat bagaimana masing-masing model bekerja.
 Pendekatan yang diimplementasikan untuk diuji meliputi:
 ### 1. **Content-based Approach**
-Pendekatan yang digunakan berdasarkan kesamaan deskripsi/kategori dari produk yang pernah dibeli/review oleh user pada platform. Setelah ekstraksi fitur teks menggunakan TF-IDF, menghitung *Cosine Similarity* antar produk untuk merekomendasikan item serupa dengan preferensi pengguna. 
-Kesamaan kosinus adalah ukuran yang digunakan untuk menghitung tingkat kemiripan antara dua vektor dalam ruang berdimensi n dengan mengukur sudut kosinus antara kedua vektor tersebut.
-
+Pendekatan yang digunakan berdasarkan kesamaan deskripsi/kategori dari produk yang pernah dibeli/review oleh user pada platform. Berikut beberapa teknik data preparation untuk *Content-based Approach*:
+- Ekstraksi fitur teks menggunakan TF-IDF pada kolom kategori produk,
+- Menghitung *Cosine Similarity* antar produk untuk merekomendasikan item serupa dengan preferensi pengguna. Kesamaan kosinus adalah ukuran yang digunakan untuk menghitung tingkat kemiripan antara dua vektor dalam ruang berdimensi n dengan mengukur sudut kosinus antara kedua vektor tersebut.
 ![Cosine Similarity](asset/cosinesim.png)
+  - `a . b` = hasil perkalian titik vektor `a` dan `b`.
+  - `||a||` and `||b||` = panjang (besarnya) dua vektor 'a' dan 'b' yang dihitung sebagai `||a|| = √(a₁² + a₂² + … + aₙ²)`.
+  - `||a|| × |b||` = hasil perkalian panjang vektor `a` dan `b`.
 
+  Nilai yang dihasilkan akan berada dalam kisaran -1 hingga 1, di mana:
+  - Bila kosinus kesamaannya adalah 1, artinya vektor-vektor tersebut mempunyai arah yang sama dan sangat mirip.
+  - Bila kosinus kesamaannya adalah 0, berarti vektor-vektor tersebut tegak lurus satu sama lain dan tidak mempunyai kesamaan.
+  - Bila kesamaan kosinusnya -1, artinya vektor-vektor tersebut mempunyai arah berlawanan dan sama sekali tidak serupa.
+
+  Membuat fungsi inference rekomendasi produk setelah membuat dataframe *cosine similarity* antara nama produk dan kategorinya. Mencari item/product rekomendasi terdekat sebanyak k-value. Misal dalam contoh k=5, maka fungsi akan mencari 5 item terdekat dari sample product yang dicari.
+![Product Recommendation](asset/productRecom1.png)
 ### 2. **Collaborative Approach**
-![Matriks Interaksi](asset/matriksInteraksi.png)
-
-Membuat matriks yang setiap barisnya mewakili pengguna (user) dan setiap kolomnya mewakili produk (product).Nilai dalam matriks menunjukkan interaksi antara pengguna dan produk (misalnya, rating, jumlah pembelian, atau indikasi biner jika pengguna membeli produk tersebut).
+Berikut beberapa teknik data preparation untuk *Content-based Approach*:
+- Mengubah value data pada fitur user_id dan product_id menjadi list lalu encoding pada masing-masing user dan *product* ID.
+![Matriks Interaksi](asset\listUser_product.png)
+![Contoh List User](asset/contohListUser.png)
+- *Mapping* hasil *encoding* fitur user dan product ID.
+- Melakukan *Test-Train Split* data lalu membersihkan nilai null pada hasil split tersebut.
 
 Dalam Percobaan *training* model dengan dataset, dalam *collaborative approach* membangun fungsi kelas `RecommenderNet` yang berisi *layers* menggunakan keras tensorflow dengan parameter *embedding* yang diberikan berdasarkan jumlah user dan produk. Embedding berfungsi untuk mengubah jumlah user dan produk dalam bentuk integer diubah menjadi representasi vektor untuk pelatihan model nantinya.
 
-![Membuat Embedding]()
+![Membuat Embedding](asset\classEmbedding.png)
 
 **Parameter Model** :
 - **embedding_size**: Ini adalah dimensi dari vektor embedding. Ukuran ini menentukan seberapa banyak informasi yang dapat disimpan dalam setiap vektor embedding. Nilai 50 digunakan di dalam kelas ini.
@@ -177,7 +190,7 @@ Dalam Percobaan *training* model dengan dataset, dalam *collaborative approach* 
 
 Setelah membuat kelas *embedding*, kita membuat *call* menjelaskan bagaimana *embedding layer* dipanggil saat melakukan *forward pass*.
 
-![Membuat Call]()
+![Membuat Call](asset\classCall.png)
 
 **Call Methode**:
 - **user_vector = self.user_embedding(inputs[:,0])**: Layer user_embedding mengambil input integer yang merepresentasikan ID pengguna
@@ -197,16 +210,24 @@ Dalam fungsi `hybrid_recommendation`,sistem rekomendasi hibrida dengan menginteg
 ## Evaluation
 ### 1. **Content-based Approach**
 Hasil menggunakan *Content-based Approach*:
-Contoh sampling nama produk yang akan digunakan sebagai sasaran percobaan: **instacuppa rechargeable mini electric chopper  stainless steel blades one touch operation for mincing garlic ginger onion vegetable meat nuts white ml pack of watts** yang merupakan barang elektronik dapur digunakan untuk mendadu makanan menggunakan *chopper*. Hasil Rekomendasi dari produk tersebut:
+Contoh sampling nama produk yang akan digunakan sebagai sasaran percobaan: `logitech wireless mouse dpi optical tracking month life battery compatible window mac chromebookpclaptop` yang merupakan barang aksesoris komputer, hasil rekomendasi dari produk tersebut:
 
 ![Hasil Content Based](asset/hasilContentBased.png)
 
-Hasil rekomendasi cukup mendekati karena beberapa rekomen merupakan barang elektronik dapur seperti : **borosil jumbo watt grill sandwich maker black**.
+#### Precision@k 
+Precision@k adalah metrik yang mengevaluasi berapa banyak dari k item prediksi teratas yang sebenarnya relevan, dengan fokus pada keakuratan hasil awal dalam daftar atau sistem rekomendasi. Mengukur proporsi item relevan dalam k rekomendasi teratas. Nilai k yang dipakai pada fungsi sistem rekomendasi = 5.
+| precision = relevant_recommendations / k |
+| --- |
+Maka perhitungannya dari 5 item direkomendasi, ternyata 5 item tersebut relevan dibagi nilai k=5, **hasilnya 1.0** menandakan sistem rekomendasi dapat mencari item yang relevan dengan item sample yang dibeli oleh user. Hasil rekomendasi sangat mendekati karena beberapa rekomen merupakan barang aksesori komputer seperti : `robustrion tempered glass screen protector ipad inch th gen generation th gen th gen` dan kategori yang sama `computeraccessories`.
 
 ### 2. **Collaborative Approach**
 Setelah pelatihan model dengan model `RecommenderNet`, evaluasi ukuran pelatihan menggunakan RMSE (Root Mean Squared Error), semakin rendah skor RMSE maka semakin baik indikasi model bekerja. Root mean square error (RMSE) digunakan secara luas sebagai ukuran kinerja dalam prediksi gerakan berkelanjutan. Ia mengukur perbedaan rata-rata titik data aktual dari nilai prediksi, dan perbedaannya dikuadratkan untuk menghindari pembatalan nilai positif dan negatif, saat keduanya dijumlahkan.
 
 ![Rumus RMSE](asset/rumusRMSE.png)
+- yi = nilai aktual
+- yp = nilai prediksi 
+- n = jumlah observasi/baris
+
 ![Kurva RMSE](asset/hasilRMSE.png)
 
 Hasil menggunakan *Collaborative Approach*:
@@ -225,15 +246,20 @@ Daftar 10 produk yang direkomendasikan (berdasarkan prediksi rating tertinggi ol
 
 ![Top 10 Rekomendasi](asset/top10Rekomen.png)
 ### 3. **Hybrid Approach**
-Setelah membuat fungsi `hybrid_recommendation`, mengambil sample dari baris pertama dalam fitur `product_id`, `product_name` dan `category` yang dianggap pernah dibeli/review oleh user. Dalam konteks notebook, produk yang kita ambil: `agaro supreme high pressure washer  watts  bars lmin flow rate  meters outlet hose portable for carbike and home cleaning purpose black and orange`. setelah itu memanggil fungsi `hybrid_recommendation` menghitung `cosine_sim`, mencari barang yang mirip dengan rating barang tersebut dari review user dan berdasarkan kategori yang mendekati produk tersebut.
+Setelah membuat fungsi `hybrid_recommendation`, mengambil sample dari baris pertama dalam fitur `product_id`, `product_name` dan `category` yang dianggap pernah dibeli/review oleh user. Dalam konteks notebook, produk yang kita ambil: `amazonbasics foot high speed hdmi male female extension cable`. setelah itu memanggil fungsi `hybrid_recommendation` menghitung `cosine_sim`, mencari barang yang mirip dengan rating barang tersebut dari review user dan berdasarkan kategori yang mendekati produk tersebut.
 Hasil rekomendasi produk tersebut:
 - Menyajikan daftar produk teratas (top-N) sebagai hasil rekomendasi hibrida.
 - Rekomendasi ini mempertimbangkan baik karakteristik konten produk maupun pola peringkat pengguna.
 
   ![Hasil Rekomendasi Hybrid](asset/hasilTop10Hybrid.png)
+#### Precision@K
+Nilai k yang dipakai pada fungsi sistem rekomendasi = 10.
+| precision = relevant_recommendations / k |
+| --- |
+Maka perhitungannya dari 10 item direkomendasi, ternyata berdasarkan dari relevan kategori hanya 4 item relevan dibagi nilai k=10, **hasilnya 0.4** menandakan sistem rekomendasi dapat mencari item yang relevan dengan item sample yang dibeli oleh user berdasarkan kesamaan kategori dan fitur teks yang sama dari nama product.
 ## :question: Menjawab Problem Statements 
 1. Bagaimana memberikan rekomendasi produk yang relevan kepada pengguna berdasarkan riwayat pembelian dan review mereka?
-Answer: Kita dapat mengambil rekomendasi produk yang relevan dengan menggunakan beberapa fitur yang mendukung hasil dari pendekatan sistem rekomendasi seperti `product_id`, `user_id`, `rating`  
+Answer: Kita dapat mengambil rekomendasi produk yang relevan dengan menggunakan beberapa fitur yang mendukung hasil dari pendekatan sistem rekomendasi seperti `product_id`, `user_id`, `rating`.
 2. Bagaimana menggabungkan informasi produk (content) dan perilaku pengguna (collaborative) untuk meningkatkan kualitas rekomendasi?
 Answer: Dengan menggunakan `Hybrid Recommendation`, kita dapat menggabungkan konten produk dan perilaku pengguna dilihat dari review rating user kasih ke produk yang mereka pakai dan juga menyocokkan kategori produk yang mendekati dari review kategori produk tersebut.
 3. Bagaimana mengatasi keterbatasan masing-masing metode filtering untuk menghasilkan sistem rekomendasi yang optimal?

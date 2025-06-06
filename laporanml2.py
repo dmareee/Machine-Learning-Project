@@ -387,6 +387,37 @@ print(contoh_product)
 
 product_recommendations(contoh_product)
 
+def calculate_precision_at_k(recommended_products, original_product_category, k):
+    """
+    Menghitung Precision@K berdasarkan kesamaan kategori.
+
+    Args:
+        recommended_products: DataFrame berisi produk yang direkomendasikan.
+        original_product_category: Kategori produk awal.
+        k: Jumlah rekomendasi teratas yang dipertimbangkan.
+
+    Returns:
+        Precision@K.
+    """
+    relevant_recommendations = recommended_products['category'].head(k).apply(lambda x: x == original_product_category).sum()
+    precision = relevant_recommendations / k
+    return precision
+
+# Pilih contoh produk secara acak dari DataFrame yang sudah diproses (drop_df)
+sample_product = drop_df.sample(1).iloc[0]
+sample_product_name = sample_product['product_name']
+sample_product_category = sample_product['category']
+k_value = 5  # Pilih nilai K, misalnya 5
+
+print(f"Menghitung Precision@{k_value} untuk produk: \"{sample_product_name}\" dengan kategori: \"{sample_product_category}\"")
+print("===" * 20)
+
+# Content-based filtering
+content_based_recommendations = product_recommendations(sample_product_name, k=k_value)
+content_based_precision = calculate_precision_at_k(content_based_recommendations, sample_product_category, k_value)
+print(f"Precision@k = {k_value} (Content-based): {content_based_precision:.4f}")
+print("---" * 20)
+
 """## Collaborative Recommendation"""
 
 # Mengubah userID menjadi list tanpa nilai yang sama
@@ -653,5 +684,36 @@ sample_product_category_value = sample_product_row['category']
 # Call the hybrid_recommendation function with the product_id value
 recommended_products = hybrid_recommendation(sample_product_id_value, cosine_sim, product_user_matrix, df)
 
-print("Recommendation for user who purchased product \"" + sample_product_name_value + "\"")
+print(f'Recommendation for user who purchased product {sample_product_name_value} \n dari kategori: {sample_product_category_value}')
 recommended_products.head(10)
+
+def calculate_precision_at_k(recommended_products, original_product_category, k):
+    """
+    Menghitung Precision@K berdasarkan kesamaan kategori.
+
+    Args:
+        recommended_products: DataFrame berisi produk yang direkomendasikan.
+        original_product_category: Kategori produk awal.
+        k: Jumlah rekomendasi teratas yang dipertimbangkan.
+
+    Returns:
+        Precision@K.
+    """
+    relevant_recommendations = recommended_products['category'].head(k).apply(lambda x: x == original_product_category).sum()
+    precision = relevant_recommendations / k
+    return precision
+
+# Pilih contoh produk secara acak dari DataFrame yang sudah diproses (drop_df)
+sample_product_id = sample_product_row['product_id']
+sample_product_name = sample_product_row['product_name']
+sample_product_category = sample_product_row['category']
+k_value = 10  # Pilih nilai K, misalnya 5
+
+print(f"Menghitung Precision@{k_value} untuk produk: \"{sample_product_name}\" dengan kategori: \"{sample_product_category}\"")
+print("===" * 20)
+
+# Hybrid recommendation
+# sample_product_id = sample_product['product_id']
+hybrid_recommendations = hybrid_recommendation(sample_product_id, cosine_sim, product_user_matrix, df, top_n=k_value)
+hybrid_precision = calculate_precision_at_k(hybrid_recommendations, sample_product_category, k_value)
+print(f"Precision@k = {k_value} (Hybrid): {hybrid_precision:.4f}")
