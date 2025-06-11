@@ -1,4 +1,5 @@
 # Laporan Proyek Machine Learning - Damar Syarafi Ramadhan
+## Pengembangan Sistem Rekomendasi Produk pada Platform E-Commerce Menggunakan Content-Based, Collaborative, dan Hybrid Filtering
 ## :notebook: Latar Belakang
 Sistem rekomendasi produk merupakan komponen penting dalam platform e-commerce seperti Amazon untuk meningkatkan pengalaman pengguna dan penjualan. Dengan banyaknya produk dan data transaksi yang tersedia, sistem rekomendasi dapat membantu pengguna menemukan produk yang relevan dan sesuai preferensi mereka. Proyek ini bertujuan membangun sistem rekomendasi produk Amazon menggunakan data pembelian dan review pelanggan dari dataset Kaggle (amazon-sales-dataset). Pendekatan yang digunakan meliputi content-based filtering, collaborative filtering, dan hybrid filtering untuk mengoptimalkan akurasi rekomendasi.
 
