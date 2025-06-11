@@ -1,4 +1,5 @@
 # Laporan Proyek Machine Learning - Damar Syarafi Ramadhan
+## Prediksi Penjualan Ritel Harian Berbasis Time Series dengan Integrasi Tren Musiman dan Aktivitas Pemasaran menggunakan XGBoost
 ## :notebook: Latar Belakang
 Industri ritel menghadapi tantangan besar dalam perencanaan stok dan pengelolaan inventori akibat dinamika tren musiman, perilaku konsumen, serta pengaruh promosi dan strategi pemasaran. Kemampuan memprediksi penjualan (sales forecasting) sangat penting untuk pengambilan keputusan bisnis yang efektif, seperti pengadaan barang, penentuan strategi promosi, dan manajemen rantai pasok. Penelitian Fildes et al. (2019) menunjukkan bahwa prediksi penjualan yang akurat dapat meningkatkan profitabilitas dan menurunkan biaya operasional. Integrasi data musiman dan pemasaran ke dalam model prediksi terbukti meningkatkan akurasi dibandingkan hanya menggunakan data historis penjualan.
 
