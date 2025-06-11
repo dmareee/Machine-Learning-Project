@@ -62,12 +62,12 @@ Hasil pengecekan tersebut kita dapat menjumlahkan data null dan duplikat yang ad
 
 ### Exploratory Data Analysis:
 #### 1. Analisis Sentimen.
-![Analisis Sentimen](asset\sentiment.png)
+![Analisis Sentimen](asset/sentiment.png)
 
 Terlihat mayoritas review produk yang dikeluarkan oleh user sangat positif, menunjukkan bahwa secara umum, pengguna memiliki pengalaman yang baik dan puas dengan produk-produk di dataset ini. Sentimen positif yang tinggi bisa menjadi salah satu faktor yang dipertimbangkan dalam sistem rekomendasi produk, menunjukkan popularitas atau kepuasan pengguna.
 
 #### 2. Top Kategori berdasarkan Jumlah Produk yang beredar di Amazon.
-![Categories Counts](asset\topcategory.png)
+![Categories Counts](asset/topcategory.png)
 
 Pembelian yang paling banyak dibeli adalah produk elektronik, menunjukkan platform Amazon sangat dipercayai untuk penjualan barang elektronik yang diperlukan oleh user. Diikuti part *computer&accessories* yang dibeli oleh para antusias *PC builder*. Insight ini juga dikuatkan dengan analisis rata-rata `rating` setiap kategori produk yang dijual pada barang elektronik mendapatkan rata-rata `rating` **4.09**. Konsumen cenderung membeli barang elektronik dari platform yang dianggap terpercaya, menawarkan variasi produk yang luas, dan memiliki sistem pengiriman yang andal.
 
@@ -79,16 +79,16 @@ Pembelian yang paling banyak dibeli adalah produk elektronik, menunjukkan platfo
 Barang *Home Improvement* mendapatkan rata-rata persentase diskon paling tinggi diantara semua kategori produk. Menunjukkan Produk di kategori *Home Improvement* mungkin memiliki margin keuntungan yang memungkinkan untuk menawarkan diskon yang lebih besar. Diskon tinggi bisa menjadi cara untuk menarik perhatian pelanggan ke kategori ini dan mendorong mereka untuk menjelajahi produk lain.
 
 #### 4. Heatmap Korelasi.
-![Heatmap Correlation](asset\diskonkategori.png)
+![Heatmap Correlation](asset/diskonkategori.png)
 
 ## Data Preparation
 ### 1. Mengatasi *Missing Values* pada Dataset
 Karena adanya nilai kosong pada kolom `rating_count`, menggunakan metode manipulasi data dengan imputasi agar tidak kehilangan data yang relevan. 
-![Null Imputation](asset\fillna.png)
+![Null Imputation](asset/fillna.png)
 
 ### 2. :test_tube: Feature Engineering:
   - Mengubah Format *Currency* pada harga produk dan rating produk dikonversikan ke dalam bentuk float (decimal).
-  ![Format Float](asset\formatcurrency.png)
+  ![Format Float](asset/formatcurrency.png)
 
 ### 3. Text Cleaning:
   - Ekstraksi kategori utama yang mempunyai keturunan struktur kategori contoh: `Computers & Accessories -> Accessories -> Cables & Accessories -> Cables -> USB Cables`. Maka yang hanya diambil hanyalah Computers & Accessories.
@@ -108,7 +108,7 @@ Metode IQR untuk menghapus outlier didasarkan pada gagasan bahwa nilai-nilai yan
     - Kuartil Ketiga (Q3): Nilai di bawahnya terletak 75% data (atau 25% data terletak di atasnya).
     - IQR: Adalah perbedaan antara Kuartil Ketiga (Q3) dan Kuartil Pertama (Q1). IQR = Q3 - Q1
 
-  ![Sebelum DropOutlier](asset\sebelumDropOut.png)
+  ![Sebelum DropOutlier](asset/sebelumDropOut.png)
   
   
   ![Fungsi DropOutlier](asset/dropOutlier.png)
@@ -146,7 +146,7 @@ Menerapkan TF-IDF (Term Frequency dan Inverse Document Frequency) Sasaran utaman
   ![Category Extract](asset/categoryExtract.png)
 
 ### 9. Train-Test Split: Membagi data menjadi data train dan test.
-![Data Split](asset\splitdata.png)
+![Data Split](asset/splitdata.png)
 
 X adalah array NumPy yang berisi pasangan ID pengguna dan ID produk yang di-encode. Ini akan menjadi input fitur untuk model rekomendasi Anda, karena model akan belajar dari interaksi pengguna dengan produk tertentu. y adalah array NumPy yang berisi rating yang sudah dinormalisasi, dengan nilai dalam rentang [0, 1]. Ini akan menjadi target (label) untuk model Anda, karena model akan dilatih untuk memprediksi rating pengguna untuk produk tertentu (dalam rentang 0 hingga 1).
 
@@ -178,14 +178,14 @@ Pendekatan yang digunakan berdasarkan kesamaan deskripsi/kategori dari produk ya
 ### 2. **Collaborative Approach**
 Berikut beberapa teknik data preparation untuk *Content-based Approach*:
 - Mengubah value data pada fitur user_id dan product_id menjadi list lalu encoding pada masing-masing user dan *product* ID.
-![Matriks Interaksi](asset\listUser_product.png)
+![Matriks Interaksi](asset/listUser_product.png)
 ![Contoh List User](asset/contohListUser.png)
 - *Mapping* hasil *encoding* fitur user dan product ID.
 - Melakukan *Test-Train Split* data lalu membersihkan nilai null pada hasil split tersebut.
 
 Dalam Percobaan *training* model dengan dataset, dalam *collaborative approach* membangun fungsi kelas `RecommenderNet` yang berisi *layers* menggunakan keras tensorflow dengan parameter *embedding* yang diberikan berdasarkan jumlah user dan produk. Embedding berfungsi untuk mengubah jumlah user dan produk dalam bentuk integer diubah menjadi representasi vektor untuk pelatihan model nantinya.
 
-![Membuat Embedding](asset\classEmbedding.png)
+![Membuat Embedding](asset/classEmbedding.png)
 
 **Parameter Model** :
 - **embedding_size**: Ini adalah dimensi dari vektor embedding. Ukuran ini menentukan seberapa banyak informasi yang dapat disimpan dalam setiap vektor embedding. Nilai 50 digunakan di dalam kelas ini.
@@ -194,7 +194,7 @@ Dalam Percobaan *training* model dengan dataset, dalam *collaborative approach* 
 
 Setelah membuat kelas *embedding*, kita membuat *call* menjelaskan bagaimana *embedding layer* dipanggil saat melakukan *forward pass*.
 
-![Membuat Call](asset\classCall.png)
+![Membuat Call](asset/classCall.png)
 
 **Call Methode**:
 - **user_vector = self.user_embedding(inputs[:,0])**: Layer user_embedding mengambil input integer yang merepresentasikan ID pengguna
