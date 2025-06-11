@@ -61,40 +61,39 @@ Hasil pengecekan tersebut kita dapat menjumlahkan data null dan duplikat yang ad
 - `Isna()` = Jumlah nilai null sebanyak 2 baris pada kolom rating_count. Diatasi dengan manipulasi data dengan mengisi value baris sebelumnya(bfill).
 
 ### Exploratory Data Analysis:
-1. Analisis Sentimen.
-
+#### 1. Analisis Sentimen.
 ![Analisis Sentimen](asset\sentiment.png)
 
 Terlihat mayoritas review produk yang dikeluarkan oleh user sangat positif, menunjukkan bahwa secara umum, pengguna memiliki pengalaman yang baik dan puas dengan produk-produk di dataset ini. Sentimen positif yang tinggi bisa menjadi salah satu faktor yang dipertimbangkan dalam sistem rekomendasi produk, menunjukkan popularitas atau kepuasan pengguna.
-2. Top Kategori berdasarkan Jumlah Produk yang beredar di Amazon.
 
+#### 2. Top Kategori berdasarkan Jumlah Produk yang beredar di Amazon.
 ![Categories Counts](asset\topcategory.png)
 
 Pembelian yang paling banyak dibeli adalah produk elektronik, menunjukkan platform Amazon sangat dipercayai untuk penjualan barang elektronik yang diperlukan oleh user. Diikuti part *computer&accessories* yang dibeli oleh para antusias *PC builder*. Insight ini juga dikuatkan dengan analisis rata-rata `rating` setiap kategori produk yang dijual pada barang elektronik mendapatkan rata-rata `rating` **4.09**. Konsumen cenderung membeli barang elektronik dari platform yang dianggap terpercaya, menawarkan variasi produk yang luas, dan memiliki sistem pengiriman yang andal.
 
 ![Mean Rating](asset/meanRating.png)
 
-3. Rata-rata Diskon Setiap Kategori Product.
-
+#### 3. Rata-rata Diskon Setiap Kategori Product.
 ![Mean Diskon](asset/diskonkategori.png)
 
 Barang *Home Improvement* mendapatkan rata-rata persentase diskon paling tinggi diantara semua kategori produk. Menunjukkan Produk di kategori *Home Improvement* mungkin memiliki margin keuntungan yang memungkinkan untuk menawarkan diskon yang lebih besar. Diskon tinggi bisa menjadi cara untuk menarik perhatian pelanggan ke kategori ini dan mendorong mereka untuk menjelajahi produk lain.
-4. Heatmap Korelasi.
 
+#### 4. Heatmap Korelasi.
 ![Heatmap Correlation](asset\diskonkategori.png)
 
 ## Data Preparation
-1. Mengatasi *Missing Values* pada Dataset
+### 1. Mengatasi *Missing Values* pada Dataset
 Karena adanya nilai kosong pada kolom `rating_count`, menggunakan metode manipulasi data dengan imputasi agar tidak kehilangan data yang relevan. 
 ![Null Imputation](asset\fillna.png)
 
-2. :test_tube: Feature Engineering:
+### 2. :test_tube: Feature Engineering:
   - Mengubah Format *Currency* pada harga produk dan rating produk dikonversikan ke dalam bentuk float (decimal).
   ![Format Float](asset\formatcurrency.png)
 
-3. Text Cleaning:
+### 3. Text Cleaning:
   - Ekstraksi kategori utama yang mempunyai keturunan struktur kategori contoh: `Computers & Accessories -> Accessories -> Cables & Accessories -> Cables -> USB Cables`. Maka yang hanya diambil hanyalah Computers & Accessories.
-  ![Ekstraksi Kategori](asset/ekstrak_cat.png)
+
+      ![Ekstraksi Kategori](asset/ekstrak_cat.png)
 
   - *Lowercase*. : Mengubah semua huruf kapital menjadi huruf kecil.
   - Menghapus tanda baca dan karakter khusus yang tidak berkontribusi pada makna kata.
@@ -102,56 +101,60 @@ Karena adanya nilai kosong pada kolom `rating_count`, menggunakan metode manipul
   - Lematisasi: Mengubah kata ke bentuk dasarnya (lemma) berdasarkan konteks, misalnya "running" menjadi "run", "better" menjadi "good".
   ![Text Cleaning](asset/contohtextclean.png)
 
-4. Remove Outlier: 
+### 4. Remove Outlier: 
 Outlier adalah nilai data yang secara signifikan berbeda dari nilai-nilai lain dalam kumpulan data. Outlier bisa disebabkan oleh kesalahan pengukuran, kesalahan entri data, atau variabilitas alami dalam data.
 Metode IQR untuk menghapus outlier didasarkan pada gagasan bahwa nilai-nilai yang berada jauh di luar rentang pusat data (yang ditentukan oleh IQR) dapat dianggap sebagai outlier
     - Kuartil Pertama (Q1): Nilai di bawahnya terletak 25% data.
     - Kuartil Ketiga (Q3): Nilai di bawahnya terletak 75% data (atau 25% data terletak di atasnya).
     - IQR: Adalah perbedaan antara Kuartil Ketiga (Q3) dan Kuartil Pertama (Q1). IQR = Q3 - Q1
 
-      ![Sebelum DropOutlier](asset\sebelumDropOut.png)
-    
-    - Fungsi DropOutlier:
+  ![Sebelum DropOutlier](asset\sebelumDropOut.png)
+  
+  
+  ![Fungsi DropOutlier](asset/dropOutlier.png)
 
-      ![Fungsi DropOutlier](asset/dropOutlier.png)
+    - Fungsi DropOutlier:
         - Menggunakan np.where untuk membatasi nilai-nilai dalam kolom:
         - Jika suatu nilai dalam kolom lebih besar dari upper_bound, nilai tersebut diganti dengan upper_bound.
         - Jika suatu nilai dalam kolom lebih kecil dari lower_bound, nilai tersebut diganti dengan lower_bound.
         - Fungsi ini mengembalikan kolom (Series) yang nilai outliernya sudah dibatasi.
 
-        ![Setelah DropOutlier](asset/setelahDropOutl.png)
+  ![Setelah DropOutlier](asset/setelahDropOutl.png)
 
-5. Proses Text ke dalam bentuk Sentimen.
+### 5. Proses Text ke dalam bentuk Sentimen.
+![Fungsi Sentimen](asset/fungsiSentimen.png)
 
-    ![Fungsi Sentimen](asset/fungsiSentimen.png)
 Contoh sederhana untuk mengklasifikasikan sentimen sebuah teks berdasarkan nilai polaritas (sentiment polarity) dari analisis sentimen, menggunakan perpustakaan seperti TextBlob atau yang serupa.
 **Penjelasan Threshold Sentimen**
-    - **Positif** : Jika nilai polaritas lebih besar dari 0.1, dianggap teks memiliki sentimen positif.
-    - **Negatif** : Jika nilai polaritas kurang dari -0.1, teks dianggap memiliki sentimen negatif.
-    - **Netral** : Jika nilai polaritas berada di antara -0.1 dan 0.1 (inklusif), teks dianggap netral atau tidak memiliki sentimen yang kuat.
+  - **Positif** : Jika nilai polaritas lebih besar dari 0.1, dianggap teks memiliki sentimen positif.
+  - **Negatif** : Jika nilai polaritas kurang dari -0.1, teks dianggap memiliki sentimen negatif.
+  - **Netral** : Jika nilai polaritas berada di antara -0.1 dan 0.1 (inklusif), teks dianggap netral atau tidak memiliki sentimen yang kuat.
 
-6. Label Encoding: Menerapkan Labelisasi untuk menandakan sentimen setiap review produk.
+### 6. Label Encoding: Menerapkan Labelisasi untuk menandakan sentimen setiap review produk.
 ![Label Encoding](asset/labeling.png)
 
-7. Drop Kolom yang kurang relevan untuk sistem rekomendasi seperti: ['discounted_price', 'actual_price', 'discount_percentage', 'review_id', 'review_title', 'user_name', 'img_link', 'product_link']
+### 7. Drop Kolom 
+Menghapus kolom yang kurang relevan untuk sistem rekomendasi seperti: ['discounted_price', 'actual_price', 'discount_percentage', 'review_id', 'review_title', 'user_name', 'img_link', 'product_link']
 
-8. Ekstraksi Fitur Teks dengan TF-IDF.
+### 8. Ekstraksi Fitur Teks dengan TF-IDF.
 ![Code TFIDF](asset/CodecategoryExtract.png)
+
 Menerapkan TF-IDF (Term Frequency dan Inverse Document Frequency) Sasaran utamanya adalah mengevaluasi pentingnya sebuah kata pada sebuah dokumen. Biasanya, terdiri dari:
     - Term Frequency (TF): mengukur seberapa sering sebuah istilah muncul dalam sebuah dokumen. Dihitung dengan membagi jumlah kemunculan sebuah istilah dalam sebuah dokumen dengan jumlah total istilah dalam dokumen tersebut.
     - Inverse Document Frequency (IDF): mengukur pentingnya istilah di seluruh korpus. Dihitung dengan mengambil logaritma dari jumlah total dokumen dibagi dengan jumlah dokumen yang memuat istilah tersebut.
 
-    ![Category Extract](asset/categoryExtract.png)
+  ![Category Extract](asset/categoryExtract.png)
 
-9. Train-Test Split: Membagi data menjadi data train dan test.
+### 9. Train-Test Split: Membagi data menjadi data train dan test.
 ![Data Split](asset\splitdata.png)
+
 X adalah array NumPy yang berisi pasangan ID pengguna dan ID produk yang di-encode. Ini akan menjadi input fitur untuk model rekomendasi Anda, karena model akan belajar dari interaksi pengguna dengan produk tertentu. y adalah array NumPy yang berisi rating yang sudah dinormalisasi, dengan nilai dalam rentang [0, 1]. Ini akan menjadi target (label) untuk model Anda, karena model akan dilatih untuk memprediksi rating pengguna untuk produk tertentu (dalam rentang 0 hingga 1).
 
-    **Variabel Utama:**  
-    - **Target**: `rating`  
-    - **Fitur**:  
-      - `user`
-      - `product`
+  **Variabel Utama:**  
+  - **Target**: `rating`  
+  - **Fitur**:  
+    - `user`
+    - `product`
 
 ## Modeling
 Melakukan pendekatan dengan mencoba beberapa pendekatan sistem rekomendasi berbeda untuk melihat bagaimana masing-masing model bekerja.
