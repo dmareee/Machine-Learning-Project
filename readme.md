@@ -1,5 +1,4 @@
-# Laporan Proyek Machine Learning - Damar Syarafi Ramadhan
-## Prediksi Penjualan Ritel Harian Berbasis Time Series dengan Integrasi Tren Musiman dan Aktivitas Pemasaran menggunakan XGBoost
+# Prediksi Penjualan Ritel Harian Berbasis Time Series dengan Integrasi Tren Musiman dan Aktivitas Pemasaran menggunakan XGBoost
 ## :notebook: Latar Belakang
 Industri ritel menghadapi tantangan besar dalam perencanaan stok dan pengelolaan inventori akibat dinamika tren musiman, perilaku konsumen, serta pengaruh promosi dan strategi pemasaran. Kemampuan memprediksi penjualan (sales forecasting) sangat penting untuk pengambilan keputusan bisnis yang efektif, seperti pengadaan barang, penentuan strategi promosi, dan manajemen rantai pasok. Penelitian Fildes et al. (2019) menunjukkan bahwa prediksi penjualan yang akurat dapat meningkatkan profitabilitas dan menurunkan biaya operasional. Integrasi data musiman dan pemasaran ke dalam model prediksi terbukti meningkatkan akurasi dibandingkan hanya menggunakan data historis penjualan.
 
@@ -184,8 +183,13 @@ Plot yang dihasilkan:
 
 ## :question: Menjawab Problem Statements 
 1. Bagaimana memprediksi penjualan harian di masa depan dengan mempertimbangkan tren musiman dan aktivitas pemasaran?
-Answer : 
-2. Sejauh mana pengaruh fitur musiman dan pemasaran terhadap akurasi prediksi penjualan?
+Answer :
+- Gunakan data historis penjualan bulanan atau harian untuk masing-masing produk atau katalog produk. Identifikasi periode puncak penjualan dan profit yang biasanya terjadi, misalnya kenaikan penjualan signifikan pada bulan November hingga Desember yang biasanya terkait musim liburan atau promo akhir tahun.
+- Analisis pola musiman (seasonal) yang berulang tiap tahun atau tiap periode tertentu. Tren musiman ini bisa berupa peningkatan penjualan di akhir pekan, musim tertentu, atau event spesifik.
+- Manfaatkan metode statistik time series yang dapat mengakomodasi komponen tren, musiman, dan efek lag (penundaan dampak penjualan sebelumnya terhadap penjualan sekarang).
+- Perhatikan lag sales dengan menganalisis keterkaitan penjualan hari-hari sebelumnya terhadap penjualan hari berikutnya atau periode berikutnya. Nilai lag ini penting untuk menentukan efek penjualan terdahulu dalam meramalkan penjualan masa depan.
+
+3. Sejauh mana pengaruh fitur musiman dan pemasaran terhadap akurasi prediksi penjualan?
 Answer :  Berdasarkan hasil evaluasi model XGBoost (model_ts) pada data uji (X_test_ts, y_test_ts):
 - Setelah menyertakan fitur musiman seperti 'Day', 'Month', 'Year', serta menggunakan pendekatan deret waktu (sales_revenue_lag_1 dan pembagian data kronologis) berkontribusi pada akurasi prediksi.
 - Korelasi dengan Marketing Spend : Anggaran yang lebih tinggi kemungkinan besar menarik perhatian pelanggan ke produk atau toko, penjualan menjadi tinggi dan otomatis pendapatan menaik drastis.
