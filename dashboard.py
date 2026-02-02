@@ -8,7 +8,7 @@ df = pd.read_csv('amazon.csv')
 st.title("Mesin Sistem Rekomendasi Produk Platform E-commerce Amazon")
 
 with st.expander('Data'):
-  st.info("""Dataset Amazon Sales yang diambil dari Kaggle berisi informasi lengkap terkait produk dan ulasan pengguna, dengan struktur variabel sebagai berikut:
+  st.markdown("""Dataset Amazon Sales yang diambil dari Kaggle berisi informasi lengkap terkait produk dan ulasan pengguna, dengan struktur variabel sebagai berikut:
           - product_id: ID unik produk
           - product_name: Nama produk
           - category: Kategori produk
