@@ -47,7 +47,7 @@ def view_average_discount(data):
     per_category_disc = data.groupby('category')['discount_percentage'].mean().reset_index()
     per_category_disc= per_category_disc.sort_values(by='discount_percentage', ascending=False)
     st.header(f'Rata-rata Harga Diskon Setiap Kategori Produk')
-    st.dataframe(per_category_disc.set_index('category')['discount_percentage'])
+    st.bar_chart(per_category_disc.set_index('category')['discount_percentage'])
 view_average_discount(data)
 def view_recommendation(model, product_name, num_recommendations):
     try:
