@@ -15,8 +15,6 @@ def load_data(nrows):
     lowercase = lambda x: str(x).lower()
     data.rename(lowercase, axis='columns', inplace=True)
     return data
-  
-df = pd.read_csv('clean_df.csv')
 
 st.title("Mesin Sistem Rekomendasi Produk Platform E-commerce Amazon")
 
