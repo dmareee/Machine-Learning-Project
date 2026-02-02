@@ -3,6 +3,19 @@ import pickle
 import pandas as pd
 import numpy as np
 
+# Add a title
+st.set_page_config(page_title="Amazon E-commerce Product Recommendation System",
+                    page_icon=":shopping:",
+                    initial_sidebar_state="expanded")
+
+#Load data
+@st.cache_data
+def load_data(nrows):
+    data = pd.read_csv('clean_df.csv', nrows=nrows)
+    lowercase = lambda x: str(x).lower()
+    data.rename(lowercase, axis='columns', inplace=True)
+    return data
+  
 df = pd.read_csv('clean_df.csv')
 
 st.title("Mesin Sistem Rekomendasi Produk Platform E-commerce Amazon")
@@ -27,5 +40,12 @@ with st.expander('Data'):
               - img_link: Link gambar produk
               - product_link: Link resmi produk di website Amazon""")
   st.write("Amazon items Raw Data")
-  amazon_items = df[["product_name", "category", "actual_price","discount_percentage","rating","rating_count"]]
-  amazon_items
+  # Create a text element and let the reader know the data is loading.
+  data_load_state = st.text('Loading data...')
+  # Load 10,000 rows of data into the dataframe.
+  data = load_data(10000)
+  # Notify the reader that the data was successfully loaded.
+  data_load_state.text('Loading data...done!')
+  amazon_items = data[["product_name", "category", "actual_price","discounted_price","rating","rating_count"]]
+  amazon_items = amazon_items.drop_duplicates().reset_index(drop=True)
+  st.dataframe(amazon_items)
