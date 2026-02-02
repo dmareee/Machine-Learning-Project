@@ -1,7 +1,30 @@
 import streamlit as st
 import pickle
-import pandas as pd
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import plotly.express as px
+import seaborn as sns
+from collections import Counter
+from textblob import TextBlob
+
+import string
+import nltk
+nltk.download('wordnet')
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+import re
+
+#Feature Engineering
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.preprocessing import LabelEncoder
+
+#Model
+from sklearn.metrics.pairwise import cosine_similarity
+
+import warnings
+warnings.filterwarnings('ignore')
 
 # Add a title
 st.set_page_config(page_title="Amazon E-commerce Product Recommendation System",
