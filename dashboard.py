@@ -48,7 +48,7 @@ def view_average_discount(data):
     per_category_disc= per_category_disc.sort_values(by='discount_percentage', ascending=False)
     st.write(f'Rata-rata Diskon Setiap Kategori {per_category_disc}')
     st.bar_chart(per_category_disc.set_index('category')['discount_percentage'])
-
+view_average_discount(data)
 def view_recommendation(model, product_name, num_recommendations):
     try:
         recommendations = model.get_recommendations(product_name, num_recommendations)
