@@ -48,7 +48,7 @@ def view_average_discount(data):
     category_disc= category_disc.sort_values(by='discounted_price', ascending=False)
     category_disc
     st.header(f'Rata-rata Harga Diskon Setiap Kategori Produk')
-    st.bar_chart(category_disc, x='category', y='discounted_price', color=["#F54927", "#6CF527", "#27D3F5", "#B027F5", "#F5E027", "#F58A27"])
+    st.bar_chart(category_disc, x='category', y='discounted_price', color='category')
 view_average_discount(data)
 def view_recommendation(model, product_name, num_recommendations):
     try:
