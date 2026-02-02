@@ -42,3 +42,18 @@ with st.expander('Data'):
   amazon_items = data[["product_name", "category", "actual_price","discounted_price","rating","rating_count"]]
   amazon_items = amazon_items.drop_duplicates().reset_index(drop=True)
   st.dataframe(amazon_items)
+
+def view_average_discount(data):
+    per_category_disc = data.groupby('category')['discount_percentage'].mean().reset_index()
+    per_category_disc= per_category_disc.sort_values(by='discount_percentage', ascending=False)
+    st.write(f'Rata-rata Diskon Setiap Kategori {per_category_disc}')
+    st.bar_chart(per_category_disc.set_index('category')['discount_percentage'])
+
+def view_recommendation(model, product_name, num_recommendations):
+    try:
+        recommendations = model.get_recommendations(product_name, num_recommendations)
+        st.write(f"Rekomendasi produk serupa untuk '{product_name}':")
+        for i, rec in enumerate(recommendations):
+            st.write(f"{i+1}. {rec}")
+    except Exception as e:
+        st.error(f"Terjadi kesalahan: {e}")
