@@ -46,10 +46,43 @@ with st.expander('Data'):
 def view_average_discount(data):
     category_disc = data.groupby('category')['discounted_price'].mean().reset_index()
     category_disc= category_disc.sort_values(by='discounted_price', ascending=False)
-    category_disc
+    # category_disc
     st.header(f'Rata-rata Harga Diskon Setiap Kategori Produk')
     st.bar_chart(category_disc, x='category', y='discounted_price', color='category')
 view_average_discount(data)
+
+
+#Feature Engineering
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.preprocessing import LabelEncoder
+
+
+def compute_tfidf_matrix(data):
+    # Dropping irrelevant Features
+    drop_col = ['discounted_price', 'actual_price', 'discount_percentage', 'review_id', 'review_title',
+                    'user_name', 'img_link', 'product_link']
+    drop_df = data.drop(columns=drop_col)
+
+    #Instantiate TF-IDF Vectorizer
+    vectorizer = TfidfVectorizer()
+
+    # Melakukan perhitungan idf pada data cuisine
+    tfidf_matrix = vectorizer.fit_transform(drop_df['category'])
+    return drop_df, tfidf_matrix
+drop_df, tfidf_matrix = compute_tfidf_matrix(data)
+
+def cosine_similarity(tfidf_matrix):
+    from sklearn.metrics.pairwise import cosine_similarity
+    cosine_sim = cosine_similarity(tfidf_matrix)
+    return cosine_sim
+cosine_sim = cosine_similarity(tfidf_matrix)
+# Membuat dataframe dari variabel cosine_sim dengan baris dan kolom berupa nama resto
+cosine_sim_df = pd.DataFrame(cosine_sim, index=drop_df['product_name'], columns=drop_df['product_name'])
+print('Shape:', cosine_sim_df.shape)
+
+# Melihat similarity matrix pada setiap resto
+cosine_sim_df.sample(5, axis=1).sample(10, axis=0)
+
 def view_recommendation(model, product_name, num_recommendations):
     try:
         recommendations = model.get_recommendations(product_name, num_recommendations)
