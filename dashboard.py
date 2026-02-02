@@ -40,12 +40,7 @@ with st.expander('Data'):
               - img_link: Link gambar produk
               - product_link: Link resmi produk di website Amazon""")
   st.write("Amazon items Raw Data")
-  # Create a text element and let the reader know the data is loading.
-  data_load_state = st.text('Loading data...')
-  # Load 10,000 rows of data into the dataframe.
-  data = load_data(10000)
-  # Notify the reader that the data was successfully loaded.
-  data_load_state.text('Loading data...done!')
+  data = load_data(1000)
   amazon_items = data[["product_name", "category", "actual_price","discounted_price","rating","rating_count"]]
   amazon_items = amazon_items.drop_duplicates().reset_index(drop=True)
   st.dataframe(amazon_items)
