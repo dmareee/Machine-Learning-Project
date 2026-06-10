@@ -524,9 +524,12 @@ with tab1:
     total_revenue = filtered_raw["sales_revenue"].sum()
     total_units = int(filtered_raw["units_sold"].sum())
     avg_marketing = filtered_raw["marketing_spend"].mean()
+    total_marketing = filtered_raw["marketing_spend"].sum()
     avg_discount = filtered_raw["discount_percentage"].mean()
+    # ROAS = (Total Sales Revenue / Total Marketing Spend) * 100
+    roas = (total_revenue / total_marketing * 100) if total_marketing > 0 else 0.0
 
-    k1, k2, k3, k4 = st.columns(4)
+    k1, k2, k3, k4, k5 = st.columns(5)
     k1.metric(
         "💰 Total Revenue",
         f"${total_revenue:,.0f}",
@@ -546,6 +549,13 @@ with tab1:
         "🏷️ Avg Discount",
         f"{avg_discount:.1f}%",
         delta="rata-rata diskon",
+    )
+    k5.metric(
+        "📢 ROAS",
+        f"{roas:.1f}%",
+        delta="Revenue / Marketing Spend",
+        help="Return on Ad Spend = (Sales Revenue ÷ Marketing Spend) × 100. "
+             "Menunjukkan berapa persen revenue yang dihasilkan dari setiap rupiah/dolar yang diinvestasikan ke marketing.",
     )
 
     st.divider()
